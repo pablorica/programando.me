@@ -35,14 +35,19 @@ class ShowPosts extends Component
       }
 
 
-      public function render()
-      {
-          return view("livewire.show-posts", [
-              "posts" => Post::where(
-                  "post_title",
-                  "like",
-                  "%" . $this->search . "%"
-              )->paginate(3),
-          ]);
-      }
+        public function render() {
+            $posts = Post::where(
+                "post_title",
+                "like",
+                "%" . $this->search . "%"
+            )->paginate(3);
+            //Log::debug("posts: ". print_r($posts,true) );
+        
+            return view(
+                "livewire.show-posts", 
+                compact(
+                    'posts'
+                )
+            );
+        }
 }

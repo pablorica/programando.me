@@ -1,6 +1,6 @@
 <div 
     class="min-h-full"
-    x-data="{ current: false, showModal: false, mobileIsOpen: false , dropdownMenu: false}"
+    x-data="{ mobileIsOpen: false , dropdownMenu: false, current: false, showModal: false}"
 >
     <nav 
         class="bg-gray-800"         
@@ -188,32 +188,39 @@
     </header>
 
     <main>
-        <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <div 
+            class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8"
+            x-init="$watch('showModal', value => console.log('showModal ' + value))"
+        >
             <div class="w-full flex justify-center px-32 mb-5">
                 <input wire:model="search" id="search" name="search" type="text" class="appearance-none block w-96 px-3 py-2 m-5 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-" placeholder="Search query ..." />
             </div>
 
+            @foreach ($posts as $post)
 
-
-            <template x-for="(post, index) in {{ json_encode($posts->toArray()['data']) }}" :key="index">
-                <div class="border-b border-gray-100 p-5 cursor-pointer" x-on:click="current = post; showModal = true">
-                    <h2 class="font-medium text-xl" x-text="post.post_title"></h2>
-                    <p x-text="post.post_content"></p>
+                <div 
+                    class="border-b border-gray-100 p-5 cursor-pointer" 
+                    x-on:click='current = @js($post); showModal = true'
+                >
+                    <h2 class="font-medium text-xl">{{ $post->post_title }}</h2>
+                    <p>{{ $post->post_content }}</p>
                 </div>
-            </template>
 
-
+            @endforeach
 
             {{ $posts->links() }}
 
 
-            <div x-show="showModal && current">
+            <template 
+                x-if="showModal && current" 
+                x-init="$watch('current', value => console.log(value))"
+            >
                 <div class="fixed z-10 inset-0 overflow-y-auto">
                 <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center">
                     <div class="fixed inset-0 transition-opacity" aria-hidden="true">
                     <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
                     </div>
-                    <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all" role="dialog" aria-modal="true" aria-labelledby="modal-headline" @click.away="showModal = false">
+                    <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
                     <div class="">
                         <div class="mt-3 text-center">
                         <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
@@ -230,7 +237,7 @@
                     </div>
                 </div>
                 </div>
-            </div>
+            </template>
 
         </div>
     </main>
