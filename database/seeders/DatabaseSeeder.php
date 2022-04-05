@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Post::factory()->count(5)->create();
+        //Post::factory()->count(5)->create();
+        // Same as above, but sets the published state to true
+        Post::factory()->count(5)->published()->create();
     }
 }

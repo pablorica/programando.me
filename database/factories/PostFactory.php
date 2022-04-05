@@ -26,11 +26,29 @@ class PostFactory extends Factory
     public function definition()
     {
         return [
-            'post_title' => $this->faker->text(50),
-            'post_content'=> $this->faker->text(500),
-            'post_excerpt' => $this->faker->text(200),
+            'post_title' => $this->faker->sentence(15),
+            'post_content'=> $this->faker->paragraphs(15, true),
+            'post_excerpt' => $this->faker->sentences(3, true),
             'post_author' => $this->faker->text(50),
             'post_readmore' => $this->faker->text(200),
+            'post_category' => $this->faker->text(20),
+            'post_image' => "post.png",
+            'post_author' => 1,
         ];
+    }
+
+    /**
+     * Indicates the post is published.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function published()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'post_published' => true,
+                'published_at' => now(),
+            ];
+        });
     }
 }

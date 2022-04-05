@@ -11,6 +11,7 @@ use App\Http\Livewire\Auth\Verify;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Livewire\ShowPosts;
+use App\Http\Livewire\CategoryPosts;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,16 @@ Route::middleware("auth")->group(function () {
     Route::post("logout", LogoutController::class)->name("logout");
 });
 
+/*
 Route::get("/posts", ShowPosts::class)
     ->name("posts")
     ->middleware("auth");
+*/
+
+Route::get("/posts", ShowPosts::class)->name("posts");
+Route::get('/posts/{slug}', function ($slug) {
+    return view('welcome');
+})->name('post-detail');
+Route::get('/categories/{category}', CategoryPosts::class)->name('post-category');
+//Route::get("/posts/{id}", ShowPosts::class)->name("post");
+

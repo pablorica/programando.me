@@ -14,6 +14,9 @@ class Post extends Model
         'post_content',
         'post_excerpt',
         'post_author',
-        'post_readmore'  
+        'post_readmore',
+        'post_category',
+        'post_image',
+        'post_author'
     ];
 }
