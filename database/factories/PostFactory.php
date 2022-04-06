@@ -31,7 +31,8 @@ class PostFactory extends Factory
             'post_excerpt' => $this->faker->sentences(3, true),
             'post_author' => $this->faker->text(50),
             'post_readmore' => $this->faker->text(200),
-            'post_category' => $this->faker->text(20),
+            'post_category' => $this->faker->word(),
+            'post_slug' => $this->faker->slug(4),
             'post_image' => "post.png",
             'post_author' => 1,
         ];

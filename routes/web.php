@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Livewire\ShowPosts;
 use App\Http\Livewire\CategoryPosts;
+use App\Http\Livewire\PostDetail;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,9 +60,7 @@ Route::get("/posts", ShowPosts::class)
 */
 
 Route::get("/posts", ShowPosts::class)->name("posts");
-Route::get('/posts/{slug}', function ($slug) {
-    return view('welcome');
-})->name('post-detail');
+Route::get('/posts/{slug}', PostDetail::class)->name('post-detail');
 Route::get('/categories/{category}', CategoryPosts::class)->name('post-category');
 //Route::get("/posts/{id}", ShowPosts::class)->name("post");
 

@@ -7,11 +7,11 @@
     <div>
 
         <div class="flex items-center border-b border-gray-200 dark:border-gray-700  pb-6">
-            <a href="{{ route('post-detail', ['slug' => $post->slug]) }}">
+            <a href="{{ route('post-detail', ['slug' => $post->post_slug]) }}">
             @if (isset($post->post_image))
                 <img
                     src="/images/{{ $post->post_image }}" 
-                    alt="coin avatar" 
+                    alt="{{ $post->post_title }}" 
                     class="w-12 h-12 rounded-full" 
                 />
             @else                    
@@ -21,7 +21,7 @@
             </a>
                 <div class="flex items-start justify-between w-full">
                     <div class="pl-3 w-full">
-                        <a href="{{ route('post-detail', ['slug' => $post->slug]) }}">
+                        <a href="{{ route('post-detail', ['slug' => $post->post_slug]) }}">
                             <h2 
                                 tabindex="0" 
                                 class="focus:outline-none text-xl font-medium leading-5 text-gray-800 dark:text-white "
@@ -46,7 +46,7 @@
                 tabindex="0" 
                 class="focus:outline-none text-sm leading-5 py-4 text-gray-600 dark:text-gray-200 "
             >
-                <a href="{{ route('post-detail', ['slug' => $post->slug]) }}">
+                <a href="{{ route('post-detail', ['slug' => $post->post_slug]) }}">
                     {{ $post->post_excerpt }}
                 </a>
             </p>
