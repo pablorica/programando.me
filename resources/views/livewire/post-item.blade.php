@@ -8,9 +8,9 @@
 
         <div class="flex items-center border-b border-gray-200 dark:border-gray-700  pb-6">
             <a href="{{ route('post-detail', ['slug' => $post->post_slug]) }}">
-            @if (isset($post->post_image))
+            @if ($post->featured_image_url())
                 <img
-                    src="/images/{{ $post->post_image }}" 
+                    src="{{ $post->featured_image_url()}}" 
                     alt="{{ $post->post_title }}" 
                     class="w-12 h-12 rounded-full" 
                 />

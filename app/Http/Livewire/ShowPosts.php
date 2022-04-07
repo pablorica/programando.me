@@ -29,9 +29,13 @@ class ShowPosts extends Component
                 "post_title",
                 "like",
                 "%" . $this->search . "%"
-            )->orderBy('id', 'DESC')->paginate(4);
+            )
+            ->where('post_published', true)
+            ->orderBy('id', 'DESC')->paginate(4);
         } else {
-            $posts = Post::orderBy('id', 'DESC')->paginate(4);
+            $posts = Post::where('post_published', true)
+                        ->orderBy('id', 'DESC')
+                        ->paginate(4);
         }
         
         //Log::debug("posts: ". print_r($posts,true) );

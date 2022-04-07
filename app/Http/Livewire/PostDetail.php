@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Post;
 use Livewire\Component;
 
+
 class PostDetail extends Component
 {
     public $post;
