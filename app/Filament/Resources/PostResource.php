@@ -15,7 +15,7 @@ class PostResource extends Resource
 {
     protected static ?string $model = Post::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
     public static function form(Form $form): Form
     {
@@ -31,8 +31,8 @@ class PostResource extends Resource
                     ->image()
                     ->preserveFilenames()
                     ->maxSize(2048),
-                Forms\Components\TextInput::make('post_category')
-                    ->maxLength(255),
+                Forms\Components\BelongsToSelect::make('post_category')
+                    ->relationship('category', 'category_title'),
                 Forms\Components\RichEditor::make('post_content'),
                 Forms\Components\Textarea::make('post_excerpt')
                     ->maxLength(65535),

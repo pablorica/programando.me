@@ -17,54 +17,29 @@ class CreatePost extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         
+        $post_table = new \stdClass();
+		$post_table->name  = 'posts';
+		$post_table->title = 'post_title';
+		$post_table->slug  = 'post_slug';
+
         $newslug = $data['post_slug'] ?: Str::slug($data['post_title']);   
 
-        if($newslug) {
-
-            //Log::debug("app/Filament/Resources/PostResource/Pages/CreatePost.php -> temporary slug created: ". $newslug);
-            
-            // check to see if any other slugs exist that are the same & get the last of them
-            $lastnum = false;
-            $last = DB::table('posts')
-                ->select('post_slug')
-                ->whereRaw("post_slug RLIKE '^{$newslug}(-[0-9]+)?$'")
-                ->orderByraw('LENGTH(`post_slug`) DESC')
-                ->orderBy('post_slug','desc')
-                ->first();
-            
-            if($last) {
-
-                //Log::debug("app/Filament/Resources/PostResource/Pages/CreatePost.php -> last slug created: ". print_r($last->post_slug,true));
-                
-                $lastnum = 1;
-                if(preg_match_all('/\d+/', $last->post_slug, $numbers)) {
-                    $lastnum += end($numbers[0]);
-                }
-                //Log::debug("app/Filament/Resources/PostResource/Pages/CreatePost.php -> last number in slug: ". $lastnum);
-            }
-
-            // if other slugs exist that are the same, append the count to the slug
-            $slug = $lastnum ? "{$newslug}-{$lastnum}" : $newslug;
-
-            //Log::debug("app/Filament/Resources/PostResource/Pages/CreatePost.php -> slug created: ". $slug);
-
-            $data['post_slug'] = $slug;
-
-        }
+        $data['post_slug'] = create_slug($post_table, null, $newslug);
 
         if(!$data['post_author']) {
-            Log::debug("app/Filament/Resources/PostResource/Pages/CreatePost.php -> Adding author to post: ". auth()->id());
+            //Log::debug("app/Filament/Resources/PostResource/Pages/CreatePost.php -> Adding author to post: ". auth()->id());
             $data['post_author'] = auth()->id();
             //$data['last_edited_by_id'] = auth()->id();
             //$this->form->model($this->record)->saveRelationships();
            // $this->form->model($data)->saveRelationships(); 
         } 
+
         if(!$data['post_category']) {
             //Log::debug("app/Filament/Resources/PostResource/Pages/CreatePost.php -> Uncategorizing post ");
-            $data['post_category'] = 'uncategorized';
+            $data['post_category'] = null;
             //$data['last_edited_by_id'] = auth()->id();
         } 
-
+        
         if($data['post_published']) {
             $data = array_merge($data, PostResource::publishResource());
             //Log::debug("app/Filament/Resources/PostResource/Pages/CreatePost.php -> Publishing post ".print_r($data,true));

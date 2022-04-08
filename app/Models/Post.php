@@ -75,6 +75,15 @@ class Post extends Model
     }
 
     /**
+     * Returns the category for this post
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(PostCategory::class,'post_category')->withDefault();
+    }
+
+    /**
      * Returns the fetured image URL
      * @return string|null
      */

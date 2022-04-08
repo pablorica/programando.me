@@ -24,61 +24,17 @@ class EditPost extends EditRecord
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        $recordID = $this->record->id;
-        $newslug = false;
+        $post_table = new \stdClass();
+		$post_table->name  = 'posts';
+		$post_table->title = 'post_title';
+		$post_table->slug  = 'post_slug';
 
-        //Log::debug("app/Filament/Resources/PostResource/Pages/EditPost.php -> Check if title or slug have changed for ".$recordID);
-        $sameTitle = DB::table('posts')
-            ->where('post_title',$data['post_title'])
-            ->where('id', $recordID)
-            ->count();
+        $post_record = new \stdClass();
+        $post_record->id    = $this->record->id;;
+		$post_record->title = $data['post_title'];
+		$post_record->slug  = $data['post_slug'];
 
-        if(!$sameTitle) {
-            //Log::debug("app/Filament/Resources/PostResource/Pages/EditPost.php -> making post slug based on title for post ".$recordID);
-            // produce a slug based on the title
-            $newslug = Str::slug($data['post_title']);        
-        }
-
-        $sameSlug = DB::table('posts')
-            ->where('post_slug',$data['post_slug'])
-            ->where('id', $recordID)
-            ->count();
-
-        if(!$sameSlug) {
-            //Log::debug("app/Filament/Resources/PostResource/Pages/EditPost.php -> updating slug for post ".$recordID);
-            $newslug = $data['post_slug'];
-        }
-
-        if($newslug) {
-            //Log::debug("app/Filament/Resources/PostResource/Pages/EditPost.php -> temporary slug created: ". $newslug);
-            
-            // check to see if any other slugs exist that are the same & get the last of them
-            $lastnum = false;
-            $last = DB::table('posts')
-                ->select('post_slug')
-                ->whereRaw("post_slug RLIKE '^{$newslug}(-[0-9]+)?$'")
-                ->whereNot('id', $recordID)
-                ->orderByraw('LENGTH(`post_slug`) DESC')
-                ->orderBy('post_slug','desc')
-                ->first();
-            
-            if($last) {
-                //Log::debug("app/Filament/Resources/PostResource/Pages/EditPost.php -> last slug created: ". print_r($last->post_slug,true));
-                
-                $lastnum = 1;
-                if(preg_match_all('/\d+/', $last->post_slug, $numbers)) {
-                    $lastnum += end($numbers[0]);
-                }
-                //Log::debug("app/Filament/Resources/PostResource/Pages/EditPost.php -> last number in slug: ". $lastnum);
-            }
-
-            // if other slugs exist that are the same, append the count to the slug
-            $slug = $lastnum ? "{$newslug}-{$lastnum}" : $newslug;
-
-            //Log::debug("app/Filament/Resources/PostResource/Pages/EditPost.php -> slug created: ". $slug);
-
-            $data['post_slug'] = $slug;
-        }
+        $data['post_slug'] = create_slug($post_table, $post_record, false);
 
         if(!$data['post_author']) {
             //Log::debug("app/Filament/Resources/PostResource/Pages/EditPost.php -> Adding author to post: ". auth()->id());
@@ -88,7 +44,7 @@ class EditPost extends EditRecord
 
         if(!$data['post_category']) {
             //Log::debug("app/Filament/Resources/PostResource/Pages/EditPost.php -> Uncategorizing post ");
-            $data['post_category'] = 'uncategorized';
+            $data['post_category'] = null;
             //$data['last_edited_by_id'] = auth()->id();
         } 
 
