@@ -31,7 +31,7 @@
                             tabindex="0" 
                             class="focus:outline-none text-sm leading-normal pt-2 text-gray-500 dark:text-gray-200 "
                         >
-                            <a href="{{ route('post-category', ['category' => $post->post_category]) }}">{{ $post->post_category }}</a>
+                            <a href="{{ route('post-category', ['category' => $post->category->category_slug]) }}">{{ $post->category->category_title }}</a>
                         </p>
                     </div>
                     <div role="img" aria-label="bookmark">

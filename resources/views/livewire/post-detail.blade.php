@@ -9,7 +9,7 @@
 	
 	<!--Title-->
 	<div class="text-center pt-16 md:pt-32">
-		<p class="text-sm md:text-base text-green-500 font-bold">{{ strtoupper($post->published_at) }} <span class="text-gray-900">/</span> {{ strtoupper($post->post_category) }}</p>
+		<p class="text-sm md:text-base text-green-500 font-bold">{{ strtoupper($post->published_at) }} <span class="text-gray-900">/</span> {{$post->category->category_title}}</p>
 		<h1 class="font-bold break-normal text-3xl md:text-5xl">{{ $post->post_title }}</h1>
 	</div>
 

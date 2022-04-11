@@ -11,6 +11,8 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 
+use Spatie\MediaLibrary\HasMedia;
+
 class PostResource extends Resource
 {
     protected static ?string $model = Post::class;
@@ -27,10 +29,23 @@ class PostResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('post_slug')
                     ->maxLength(255),
+                
+                /* *
+                //use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+                Forms\Components\SpatieMediaLibraryFileUpload::make('post_image'),
+                /* */
+                Forms\Components\SpatieMediaLibraryFileUpload::make('post_image')
+                    ->multiple()
+                    ->enableReordering()
+                    ->preserveFilenames()
+                    ->image()
+                    ->maxSize(2048),
+                /* *
                 Forms\Components\FileUpload::make('post_image')
                     ->image()
                     ->preserveFilenames()
                     ->maxSize(2048),
+                /* */
                 Forms\Components\BelongsToSelect::make('post_category')
                     ->relationship('category', 'category_title'),
                 Forms\Components\RichEditor::make('post_content'),
